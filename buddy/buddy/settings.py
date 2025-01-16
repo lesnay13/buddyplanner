@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'buddy_planner', 
+    'buddy_planner.apps.BuddyPlannerConfig',
+    'rest_framework', 
 ]
 
 MIDDLEWARE = [
