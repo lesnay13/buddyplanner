@@ -2,6 +2,7 @@ from django.urls import path, include
 from django.contrib import admin
 from . import views
 from rest_framework import generics
+from .views import main
 
 urlpatterns = [
     path('calendar/create', views.CalendarCreateView.as_view(), name = 'calendarcreate'),
@@ -18,7 +19,5 @@ urlpatterns = [
     path('month', views.TaskReadView.as_view(), name = 'month'),
     path('month/update', views.TaskUpdateView.as_view(), name = 'monthupdate'),
     path('month/delete', views.TaskDeleteView.as_view(), name = 'monthdelete'),
-
-    path('', include('frontend.urls')),
     
 ]

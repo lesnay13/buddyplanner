@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from rest_framework import generics, status
@@ -8,7 +9,8 @@ from buddy_planner.serializers import CalendarSerializer,TaskSerializer,MonthSer
 from django.urls import reverse_lazy
 import json
 
-
+def main(request):
+    return HttpResponse("Hello")
 
 class CalendarCreateView(generics.ListCreateAPIView):
     model = Calendar

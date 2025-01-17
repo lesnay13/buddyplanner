@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+ 
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'buddy_planner.apps.BuddyPlannerConfig',
-    'rest_framework', 
+    'rest_framework', 'frontend.apps.FrontendConfig',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +66,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+
+        
     },
 ]
 
