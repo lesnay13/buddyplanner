@@ -6,8 +6,13 @@ class CalendarSerializer(serializers.ModelSerializer):
         model = Calendar
         fields = '__all__' 
 
-class TaskSerializer(serializers.ModelSerializer):
+class CreateCalendarSerializer(serializers.ModelSerializer):
     class Meta:
+        model= Calendar
+        fields= ('month', 'day', 'year')
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:  
         model = Task
         fields = '__all__' 
 

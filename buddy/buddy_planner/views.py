@@ -1,16 +1,28 @@
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from rest_framework import generics, status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from buddy_planner.models import Task, Calendar, Month
-from buddy_planner.serializers import CalendarSerializer,TaskSerializer,MonthSerializer
+from buddy_planner.serializers import CalendarSerializer,CreateCalendarSerializer, TaskSerializer,MonthSerializer
 from django.urls import reverse_lazy
 import json
 
 
+class CreateCalendarView(APIView):
+    serializer_class = CreateCalendarSerializer
 
-class CalendarCreateView(generics.ListCreateAPIView):
+    def post(self,request, format=None):
+        if not self.request.session.exists(self.request.session.session_key);
+            self.request.session.create()
+
+        serializer =self.serializer_class(data=request.data)
+        if serializer.is_valid():
+                
+
+"""class CalendarCreateView(generics.ListCreateAPIView):
     model = Calendar
     serializer_class = CalendarSerializer
     queryset = Calendar.objects.all()
@@ -23,7 +35,7 @@ class CalendarCreateView(generics.ListCreateAPIView):
         calendar.save()
         result = "successfully saved calendar"
         return Response(result, status=status.HTTP_200_OK)
-    
+"""    
 
 class CalendarReadView(generics.ListCreateAPIView):
     model = Calendar
