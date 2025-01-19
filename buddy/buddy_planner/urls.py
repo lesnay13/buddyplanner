@@ -5,7 +5,7 @@ from rest_framework import generics
 from .views import main
 
 urlpatterns = [
-    path('calendar/create', views.CalendarCreateView.as_view(), name = 'calendarcreate'),
+    path('calendar/create', views.CreateCalendarView.as_view(), name = 'calendarcreate'),
     path('calendar', views.CalendarReadView.as_view(), name = 'calendar'),
     path('calendar/update', views.CalendarUpdateView.as_view(), name = 'calendarupdate'),
     path('calendar/delete', views.CalendarDeleteView.as_view(), name = 'calendardelete'),

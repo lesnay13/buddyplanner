@@ -10,16 +10,37 @@ from buddy_planner.serializers import CalendarSerializer,CreateCalendarSerialize
 from django.urls import reverse_lazy
 import json
 
+def main(request):
+    return HttpResponse("Hello")
+
 
 class CreateCalendarView(APIView):
     serializer_class = CreateCalendarSerializer
 
     def post(self,request, format=None):
-        if not self.request.session.exists(self.request.session.session_key);
+        if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
 
         serializer =self.serializer_class(data=request.data)
         if serializer.is_valid():
+            month = serializer.data.get('month')
+            day = serializer.data.get('day')
+            year = serializer.data.get('year')
+            name = self.request.session.session_key
+            queryset = Calendar.objects.filter(name=name)
+            if queryset.exists():
+                calendar = queryset[0]
+                calendar.month = month
+                calendar.day = day
+                calendar.year = year
+                calendar.save(update_fields=['month','day','year'])
+                return Response(CalendarSerializer(calendar).data, status=status.HTTP_200_OK)
+            else:
+                calendar = Calendar(name=name, month=month, day=day, year=year)
+                calendar.save()
+                return Response(CalendarSerializer(calendar).data, status=status.HTTP_201_CREATED)
+
+        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
                 
 
 """class CalendarCreateView(generics.ListCreateAPIView):
