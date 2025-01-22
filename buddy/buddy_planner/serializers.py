@@ -16,6 +16,11 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = '__all__' 
 
+class CreateTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model:Task
+        fields= ('name','description','date', 'calendar_id')
+
 class MonthSerializer(serializers.ModelSerializer):
     class Meta:
         model = Month

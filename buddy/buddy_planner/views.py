@@ -81,11 +81,36 @@ class CalendarDeleteView(generics.ListCreateAPIView):
     queryset = Calendar.objects.all()
 
 
-class TaskCreateView(generics.ListCreateAPIView):
+"""class TaskCreateView(APIView):
     model = Task
-    serializer_class = TaskSerializer
     queryset = Task.objects.all()
 
+    serializer_class = CreateTaskSerialzer
+
+    def post(self,request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        serializer =self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            name = serializer.data.get('name')
+            description = serializer.data.get('description')
+            date = serializer.data.get('date')
+            name = self.request.session.session_key
+            queryset = Task.objects.filter(name=name)
+            if queryset.exists():
+                task = queryset[0]
+                task.description = description
+                task.date = date
+                task.save(update_fields=['name','description','date',])
+                return Response(TaskSerializer(task).data, status=status.HTTP_200_OK)
+            else:
+                task = Task(name=name, description=description, date=date)
+                task.save()
+                return Response(TaskSerializer(task).data, status=status.HTTP_201_CREATED)
+
+        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)"""
+    
 class TaskReadView(generics.ListCreateAPIView):
     model = Task
     serializer_class = TaskSerializer

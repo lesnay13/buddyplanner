@@ -10,14 +10,13 @@ urlpatterns = [
     path('calendar/update', views.CalendarUpdateView.as_view(), name = 'calendarupdate'),
     path('calendar/delete', views.CalendarDeleteView.as_view(), name = 'calendardelete'),
 
-    path('task/create', views.TaskCreateView.as_view(), name = 'taskcreate'),
     path('task', views.TaskReadView.as_view(), name = 'task'),
     path('task/update', views.TaskUpdateView.as_view(), name = 'taskupdate'),
     path('task/delete', views.TaskDeleteView.as_view(), name = 'taskdelete'),
 
-    path('month/create', views.TaskCreateView.as_view(), name = 'monthcreate'),
-    path('month', views.TaskReadView.as_view(), name = 'month'),
-    path('month/update', views.TaskUpdateView.as_view(), name = 'monthupdate'),
-    path('month/delete', views.TaskDeleteView.as_view(), name = 'monthdelete'),
+   
+    path('month', views.MonthReadView.as_view(), name = 'month'),
+    path('month/update', views.MonthUpdateView.as_view(), name = 'monthupdate'),
+    path('month/delete', views.MonthUpdateView.as_view(), name = 'monthdelete'),
     
 ]
