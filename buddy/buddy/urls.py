@@ -20,5 +20,4 @@ from django.urls import include, path
 urlpatterns = [
     path('', include('buddy_planner.urls')),
     path('admin/', admin.site.urls),
-    path('', include('frontend.urls')),
 ]
