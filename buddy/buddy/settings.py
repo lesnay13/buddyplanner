@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import os
 
 from pathlib import Path
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'buddy_planner.apps.BuddyPlannerConfig',
     'rest_framework', 'frontend.apps.FrontendConfig',
+    
 ]
 
 MIDDLEWARE = [

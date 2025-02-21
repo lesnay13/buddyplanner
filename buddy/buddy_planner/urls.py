@@ -8,5 +8,5 @@ urlpatterns = [
     path('task', views.TaskReadView.as_view(), name = 'task'),
     path('task/update', views.TaskUpdateView.as_view(), name = 'taskupdate'),
     path('task/delete', views.TaskDeleteView.as_view(), name = 'taskdelete'),
-  
+    path('profile/', views.UserProfileView.as_view(), name='user-profile'),
 ]
