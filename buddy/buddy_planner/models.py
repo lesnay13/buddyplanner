@@ -1,6 +1,9 @@
 from django.db import models
 import string
 import random
+from django.contrib.auth.models import AbstractUser, Group, Permission
+
+
 
 """def generate_unique_code():
     length = 6
@@ -27,6 +30,20 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+class User(AbstractUser):
+    birth_date = models.DateField(null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+
+    groups = models.ManyToManyField(
+        Group, related_name='buddy_user_set', blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        Permission, related_name='buddy_user_permissions_set', blank=True
+    )
+
+    def __str__(self):
+        return self.username
+    
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
@@ -34,4 +51,3 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-    

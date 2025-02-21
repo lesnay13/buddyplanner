@@ -5,8 +5,9 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated 
 from buddy_planner.models import Task, UserProfile
-from buddy_planner.serializers import CreateTaskSerializer, TaskSerializer
+from buddy_planner.serializers import CreateTaskSerializer, TaskSerializer, UserProfileSerializer
 from django.urls import reverse_lazy
 import json
 
