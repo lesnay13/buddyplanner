@@ -2,108 +2,116 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from rest_framework import generics, status
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated 
-from buddy_planner.models import Task, UserProfile
-from buddy_planner.serializers import CreateTaskSerializer, TaskSerializer, UserProfileSerializer
-from django.urls import reverse_lazy
-import json
+from buddy_planner.models import Task, UserProfile, Category, Reminder, RecurringTask, Note, TaskList, Priority, SharedTask
+from buddy_planner.serializers import (
+    CreateTaskSerializer, TaskSerializer, UserProfileSerializer,
+    CategorySerializer, ReminderSerializer, RecurringTaskSerializer,
+    NoteSerializer, TaskListSerializer, PrioritySerializer, SharedTaskSerializer
+)
 
 def main(request):
     return HttpResponse("Hello")
 
-
-class CreateTaskView(APIView):
-    serializer_class = CreateTaskSerializer
-
-    def post(self,request, format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
-
-        serializer =self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            name = serializer.data.get('name')
-            description = serializer.data.get('description')
-            date = serializer.data.get('date')
-            queryset = Task.objects.filter(name=name)
-            if queryset.exists():
-                task = queryset[0]
-                task.name = name
-                task.description = description
-                task.date = date
-                task.save(update_fields=['name','description','date'])
-                return Response(TaskSerializer(task).data, status=status.HTTP_200_OK)
-            else:
-                task = Task(name=name, description=description, date=date,)
-                task.save()
-                return Response(TaskSerializer(task).data, status=status.HTTP_201_CREATED)
-
-        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
-                
-
-"""class TaskCreateView(APIView):
-    model = Task
-    queryset = Task.objects.all()
-
-    serializer_class = CreateTaskSerialzer
-
-    def post(self,request, format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
-
-        serializer =self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            name = serializer.data.get('name')
-            description = serializer.data.get('description')
-            date = serializer.data.get('date')
-            name = self.request.session.session_key
-            queryset = Task.objects.filter(name=name)
-            if queryset.exists():
-                task = queryset[0]
-                task.description = description
-                task.date = date
-                task.save(update_fields=['name','description','date',])
-                return Response(TaskSerializer(task).data, status=status.HTTP_200_OK)
-            else:
-                task = Task(name=name, description=description, date=date)
-                task.save()
-                return Response(TaskSerializer(task).data, status=status.HTTP_201_CREATED)
-
-        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)"""
-    
 class TaskReadView(generics.ListCreateAPIView):
-    model = Task
-    serializer_class = TaskSerializer
     queryset = Task.objects.all()
-
-class TaskUpdateView(generics.ListCreateAPIView):
-    model = Task
     serializer_class = TaskSerializer
-    queryset = Task.objects.all()
-
-class TaskDeleteView(generics.ListCreateAPIView):
-    model = Task
-    serializer_class = TaskSerializer
-    queryset = Task.objects.all()
-
-
-class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        try:
-            profile = UserProfile.objects.get(user=request.user)
-            serializer = UserProfileSerializer(profile)
-            return Response(serializer.data)
-        except UserProfile.DoesNotExist:
-            return Response({"detail": "Profile not found"}, status=404)
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user)
 
-    def put(self, request):
-        profile = UserProfile.objects.get(user=request.user)
-        serializer = UserProfileSerializer(profile, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+class TaskUpdateView(generics.UpdateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user)
+
+class TaskDeleteView(generics.DestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user)
+
+class CategoryViewSet(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
+
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
+
+class ReminderViewSet(generics.ListCreateAPIView):
+    queryset = Reminder.objects.all()
+    serializer_class = ReminderSerializer
+    permission_classes = [IsAuthenticated]
+
+class ReminderDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Reminder.objects.all()
+    serializer_class = ReminderSerializer
+    permission_classes = [IsAuthenticated]
+
+class RecurringTaskViewSet(generics.ListCreateAPIView):
+    queryset = RecurringTask.objects.all()
+    serializer_class = RecurringTaskSerializer
+    permission_classes = [IsAuthenticated]
+
+class RecurringTaskDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = RecurringTask.objects.all()
+    serializer_class = RecurringTaskSerializer
+    permission_classes = [IsAuthenticated]
+
+class NoteViewSet(generics.ListCreateAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+
+class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+
+class TaskListViewSet(generics.ListCreateAPIView):
+    queryset = TaskList.objects.all()
+    serializer_class = TaskListSerializer
+    permission_classes = [IsAuthenticated]
+
+class TaskListDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TaskList.objects.all()
+    serializer_class = TaskListSerializer
+    permission_classes = [IsAuthenticated]
+
+class PriorityViewSet(generics.ListCreateAPIView):
+    queryset = Priority.objects.all()
+    serializer_class = PrioritySerializer
+    permission_classes = [IsAuthenticated]
+
+class PriorityDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Priority.objects.all()
+    serializer_class = PrioritySerializer
+    permission_classes = [IsAuthenticated]
+
+class SharedTaskViewSet(generics.ListCreateAPIView):
+    queryset = SharedTask.objects.all()
+    serializer_class = SharedTaskSerializer
+    permission_classes = [IsAuthenticated]
+
+class SharedTaskDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SharedTask.objects.all()
+    serializer_class = SharedTaskSerializer
+    permission_classes = [IsAuthenticated]
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return UserProfile.objects.get(user=self.request.user)
