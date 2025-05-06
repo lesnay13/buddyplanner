@@ -66,23 +66,23 @@ class Reminder(models.Model):
     method = models.CharField(max_length=20, choices=[('email', 'Email'), ('notification', 'Notification')])
 
     def __str__(self):
-        return f"Reminder for {self.Task.title} at {self.reminder_time}"
+        return f"Reminder for {self.task.title} at {self.reminder_time}"
 
 class RecurringTask(models.Model):
     task = models.OneToOneField(Task, on_delete=models.CASCADE)
     recurrence_rule = models.CharField(max_length=255)  # e.g., "every Monday at 9 AM"
     
     def __str__(self):
-        return f"Recurring Task for {self.Task.title}"
+        return f"Recurring Task for {self.task.title}"
 
 class Note(models.Model):
-    Task = models.ForeignKey(Task, related_name='notes', on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, related_name='notes', on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Note by {self.user.username} on {self.Task.title}"
+        return f"Note by {self.user.username} on {self.task.title}"
 
 class TaskList(models.Model):
     title = models.CharField(max_length=255)
@@ -100,9 +100,9 @@ class Priority(models.Model):
         return self.name
 
 class SharedTask(models.Model):
-    Task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     shared_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Shared Task {self.Task.title} with {self.user.username}"
+        return f"Shared Task {self.task.title} with {self.user.username}"
