@@ -2,6 +2,8 @@ from django.db import models
 import string
 import random
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.db.models.signals import post_save # Import post_save
+from django.dispatch import receiver # Import receiver
 
 
 
@@ -33,9 +35,26 @@ class User(AbstractUser):
         return self.username
     
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    # Add other fields like location, birth_date, etc. as needed
+    # Example:
+    # location = models.CharField(max_length=100, blank=True, null=True)
+    # birth_date = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
+
+# Optional: Signal to create or update UserProfile when a User is created/saved
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+    else:
+        # Check if profile exists, if not create it (e.g., for existing users without profiles)
+        UserProfile.objects.get_or_create(user=instance)
+    instance.profile.save()
 
     def __str__(self):
         return self.user.username

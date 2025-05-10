@@ -1,117 +1,67 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.template import loader
-from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from buddy_planner.models import Task, UserProfile, Category, Reminder, RecurringTask, Note, TaskList, Priority, SharedTask
-from buddy_planner.serializers import (
-    CreateTaskSerializer, TaskSerializer, UserProfileSerializer,
-    CategorySerializer, ReminderSerializer, RecurringTaskSerializer,
-    NoteSerializer, TaskListSerializer, PrioritySerializer, SharedTaskSerializer
-)
+from rest_framework.parsers import MultiPartParser, FormParser # For file uploads
+from django.contrib.auth.models import User
+from .models import UserProfile
+from .serializers import UserProfileSerializer, RegisterSerializer, UserDetailSerializer # Updated imports
 
-def main(request):
-    return HttpResponse("Hello")
+# View for User Registration
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = RegisterSerializer # RegisterSerializer is now imported
 
-class TaskReadView(generics.ListCreateAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            # You could return a token here as well if desired,
+            # but typically login is a separate step.
+            return Response({
+                "user": UserDetailSerializer(user, context=self.get_serializer_context()).data, # Changed UserSerializer to UserDetailSerializer
+                "message": "User Created Successfully. Please login to get your token.",
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get_queryset(self):
-        return Task.objects.filter(user=self.request.user)
 
-class TaskUpdateView(generics.UpdateAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Task.objects.filter(user=self.request.user)
-
-class TaskDeleteView(generics.DestroyAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Task.objects.filter(user=self.request.user)
-
-class CategoryViewSet(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated]
-
-class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated]
-
-class ReminderViewSet(generics.ListCreateAPIView):
-    queryset = Reminder.objects.all()
-    serializer_class = ReminderSerializer
-    permission_classes = [IsAuthenticated]
-
-class ReminderDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Reminder.objects.all()
-    serializer_class = ReminderSerializer
-    permission_classes = [IsAuthenticated]
-
-class RecurringTaskViewSet(generics.ListCreateAPIView):
-    queryset = RecurringTask.objects.all()
-    serializer_class = RecurringTaskSerializer
-    permission_classes = [IsAuthenticated]
-
-class RecurringTaskDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = RecurringTask.objects.all()
-    serializer_class = RecurringTaskSerializer
-    permission_classes = [IsAuthenticated]
-
-class NoteViewSet(generics.ListCreateAPIView):
-    queryset = Note.objects.all()
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
-
-class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Note.objects.all()
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
-
-class TaskListViewSet(generics.ListCreateAPIView):
-    queryset = TaskList.objects.all()
-    serializer_class = TaskListSerializer
-    permission_classes = [IsAuthenticated]
-
-class TaskListDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = TaskList.objects.all()
-    serializer_class = TaskListSerializer
-    permission_classes = [IsAuthenticated]
-
-class PriorityViewSet(generics.ListCreateAPIView):
-    queryset = Priority.objects.all()
-    serializer_class = PrioritySerializer
-    permission_classes = [IsAuthenticated]
-
-class PriorityDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Priority.objects.all()
-    serializer_class = PrioritySerializer
-    permission_classes = [IsAuthenticated]
-
-class SharedTaskViewSet(generics.ListCreateAPIView):
-    queryset = SharedTask.objects.all()
-    serializer_class = SharedTaskSerializer
-    permission_classes = [IsAuthenticated]
-
-class SharedTaskDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = SharedTask.objects.all()
-    serializer_class = SharedTaskSerializer
-    permission_classes = [IsAuthenticated]
-
-class UserProfileView(generics.RetrieveUpdateAPIView):
+# View for User Profile (Example - you might have this already)
+class UserProfileView(generics.RetrieveUpdateAPIView): # Changed from CreateAPIView if it was that
     serializer_class = UserProfileSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser] # Add parsers for file uploads
 
     def get_object(self):
-        return UserProfile.objects.get(user=self.request.user)
+        # Retrieve or create the profile for the current user
+        # This ensures that a profile object is always available for GET, PUT, PATCH
+        profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+        return profile
+
+    # If you are using signals to create UserProfile, POST might not be needed
+    # or could be used for an initial bulk update if desired.
+    # The CreateProfilePage.js on the frontend uses POST.
+    # If get_or_create in get_object handles creation, a separate POST might be redundant
+    # unless you want different logic for creation vs update.
+    # For simplicity with get_or_create, RetrieveUpdateAPIView is often enough.
+    # If you need a distinct POST for creation:
+    # def post(self, request, *args, **kwargs):
+    #     # This would be if you don't use get_or_create in get_object for creation
+    #     # and want a dedicated POST endpoint for creating a profile.
+    #     # However, with OneToOne, it's often simpler to ensure profile exists via get_object or signals.
+    #     profile, created = UserProfile.objects.get_or_create(user=request.user)
+    #     if not created:
+    #         return Response({"detail": "Profile already exists. Use PUT to update."}, status=status.HTTP_400_BAD_REQUEST)
+        
+    #     serializer = self.get_serializer(profile, data=request.data, partial=False) # Use profile instance
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def perform_update(self, serializer):
+        # Ensure the user associated with the profile is the request.user
+        # This is implicitly handled by get_object, but good to be mindful
+        serializer.save(user=self.request.user)
+
+
+# Login is handled by djangorestframework-simplejwt's TokenObtainPairView
+# We just need to wire it up in urls.py
