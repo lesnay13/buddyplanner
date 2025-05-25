@@ -1,90 +1,49 @@
 // Login.jsx
-import { useState, useEffect } from 'react'
-import axiosInstance from '../api/Axios'
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../api/Axios';
 
 function Login() {
+  const navigate = useNavigate();
+
   const [credentials, setCredentials] = useState({
     username: '',
     password: ''
-  })
-  const [error, setError] = useState('')
-  const [csrfToken, setCsrfToken] = useState('')
-
-  const getCSRFToken = () => {
-    const name = 'csrftoken'
-    const cookies = document.cookie.split(';')
-    for (let cookie of cookies) {
-      cookie = cookie.trim()
-      if (cookie.startsWith(name + '=')) {
-        return decodeURIComponent(cookie.substring(name.length + 1))
-      }
-    }
-    return ''
-  }
-
-  // Fetch CSRF token on mount
-  useEffect(() => {
-    const fetchCSRFToken = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/auth/csrf/', {
-          method: 'GET',
-          credentials: 'include'
-        })
-        console.log('✅ CSRF token response:', response.status)
-
-        // Wait briefly to allow the browser to store the cookie
-        setTimeout(() => {
-          const token = getCSRFToken()
-          setCsrfToken(token)
-          console.log('✅ CSRF token set (delayed read):', token)
-        }, 100)
-      } catch (err) {
-        console.error('❌ Failed to fetch CSRF token:', err)
-      }
-    }
-
-    fetchCSRFToken()
-  }, [])
+  });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setCredentials(prev => ({
+    const { name, value } = e.target;
+    setCredentials((prev) => ({
       ...prev,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    if (!csrfToken || csrfToken.length < 32) {
-      setError('CSRF token missing. Please refresh the page.')
-      return
-    }
+    e.preventDefault();
 
     try {
       const response = await axiosInstance.post(
-        '/api/token/',
-        credentials,
-        {
-          headers: {
-            'X-CSRFToken': csrfToken
-          }
-        }
-      )
+        '/api/token/', // 👈 Django JWT endpoint
+        credentials    // ✅ Sending just username and password
+      );
 
-      localStorage.setItem('accessToken', response.data.access)
-      localStorage.setItem('refreshToken', response.data.refresh)
-      window.location.href = '/dashboard'
+      // ✅ Store tokens
+      localStorage.setItem('accessToken', response.data.access);
+      localStorage.setItem('refreshToken', response.data.refresh);
+
+      // ✅ Redirect to home page
+      navigate('/');
     } catch (err) {
-      console.error('Login error:', err)
-      if (err.response && err.response.status === 403) {
-        setError('CSRF error. Try refreshing the page.')
+      console.error('Login error:', err);
+      if (err.response && err.response.status === 401) {
+        setError('Invalid username or password.');
       } else {
-        setError('Invalid credentials or server error.')
+        setError('Login failed. Please try again.');
       }
     }
-  }
+  };
 
   return (
     <div className="login-container">
@@ -118,7 +77,7 @@ function Login() {
         <button type="submit">Login</button>
       </form>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
