@@ -14,8 +14,8 @@ export default function Layout({ children }) {
           <Link to="/calendar" className="text-gray-700 hover:text-gray-900">
             Calendar
           </Link>
-          <Link to="/tasks" className="text-gray-700 hover:text-gray-900">
-            Tasks
+          <Link to="/task" className="text-gray-700 hover:text-gray-900">
+            Task
           </Link>
           <Link to="/profile" className="text-gray-700 hover:text-gray-900">
             Profile

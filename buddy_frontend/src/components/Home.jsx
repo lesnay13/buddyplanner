@@ -23,7 +23,10 @@ const Home = () => {
           <h1>Welcome to BuddyPlanner</h1>
           <span className="font-bold">{currentUser.displayName}</span>
           <br />
-          This is your personalized task management and calendar platform.
+          This is gonna be a summary of your day that is on the app.
+          Add options for journaling and adjust the models. Create a journaling component. 
+          Adjust the recipe traking area. Add a meal traker / mood tracker into the journaling area.
+          Task page will have a task list for the day or week/month view? Undecided?  
           <br />
           Happy tasking and planning!
           <br />

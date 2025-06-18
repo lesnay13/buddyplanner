@@ -70,3 +70,16 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
+
+
+def profile_api(request):
+    if request.method == 'GET':
+        profile = request.user.userprofile
+        return JsonResponse({
+            'user': {
+                'username': request.user.username,
+                'birth_date': profile.birth_date,
+                'phone_number': profile.phone_number
+            },
+            'bio': profile.bio
+        })

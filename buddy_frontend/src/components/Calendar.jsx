@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -13,7 +13,16 @@ const Calendar = () => {
   const [endTime, setEndTime] = useState('');
   const [events, setEvents] = useState([]); // Add this line
   const [selectedDate, setSelectedDate] = useState('');
+  // Verify your state is properly initialized:
   const [showTask, setShowTask] = useState(false);
+  
+  // And that the Task component receives required props:
+  {showTask && (
+    <Task
+      selectedDate={selectedDate}
+      onClose={() => setShowTask(false)}
+    />
+  )}
 
   const handleDateClick = (arg) => {
     setSelectedDate(arg.dateStr);
@@ -21,30 +30,16 @@ const Calendar = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-      <div style={{ flex: 1, transform: 'scale(1)',  }}>
-        <FullCalendar
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          dateClick={(info) => {
-            // Handle date click (opens your event form)
-            setShowEventForm(true);
-            setStartDate(info.dateStr);
-          }}
-          eventClick={(info) => {
-            // Handle existing event click
-            const event = info.event;
-            setEventDetails(event.title);
-            setStartDate(event.startStr);
-            setDescription(event.extendedProps.description);
-            setShowEventForm(true);
-          }}
-          events={events}
-          selectable={true}
-        />
-      </div>
+    <div className="calendar-container">
+      <FullCalendar
+        plugins={[dayGridPlugin, interactionPlugin]}
+        initialView="dayGridMonth"
+        selectable={true}
+        dateClick={handleDateClick}  // Single dateClick handler
+        events={events}
+      />
     </div>
-  );
+    );
 }
 
 export default Calendar; // Add default export
