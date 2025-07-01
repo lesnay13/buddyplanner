@@ -3,7 +3,8 @@ from .views import (
     CustomTokenObtainPairView,
     RegisterView,
     UserProfileView,
-    get_csrf_token  
+    get_csrf_token,
+    TaskListCreateView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -11,6 +12,8 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 from django.views.generic import TemplateView  
+from django.urls import path
+from . import views
 
 app_name = 'buddy_planner'
 
@@ -26,6 +29,9 @@ urlpatterns = [
 
     # User profile
     path('profile/', UserProfileView.as_view(), name='user-profile'),
+
+    # Tasks
+    path('api/tasks/', TaskListCreateView.as_view(), name='task-list-create'),
 
     # Frontend catch-all route
     re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='vite-frontend-catchall'),

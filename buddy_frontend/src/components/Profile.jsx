@@ -10,10 +10,8 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get('/api/profile/', {
-          headers: {
-            'Accept': 'application/json'
-          }
+        const response = await axios.get('http://localhost:8000/profile/', {
+          withCredentials: true
         });
         
         if (response.headers['content-type'].includes('application/json')) {

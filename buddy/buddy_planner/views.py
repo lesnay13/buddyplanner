@@ -3,12 +3,13 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, Task
 from .serializers import (
     UserProfileSerializer, 
     RegisterSerializer, 
     UserDetailSerializer, 
-    MyTokenObtainPairSerializer
+    MyTokenObtainPairSerializer,
+    TaskSerializer
 )
 
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt 
@@ -72,14 +73,39 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
         serializer.save(user=self.request.user)
 
 
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def profile_api(request):
     if request.method == 'GET':
-        profile = request.user.userprofile
+        user = request.user
+        profile = user.userprofile
         return JsonResponse({
             'user': {
-                'username': request.user.username,
+                'username': user.username,
                 'birth_date': profile.birth_date,
                 'phone_number': profile.phone_number
             },
             'bio': profile.bio
         })
+
+# For listing and creating tasks
+class TaskListCreateView(generics.ListCreateAPIView):
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Task.objects.filter(created_by=self.request.user.profile)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user.profile)
+
+# For detail/update/delete of a specific task
+class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Task.objects.filter(created_by=self.request.user.profile)
+

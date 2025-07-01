@@ -80,16 +80,19 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return user
 
-class CreateTaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Task
-        fields = '__all__'
-
 class TaskSerializer(serializers.ModelSerializer):
+    created_by = serializers.StringRelatedField(read_only=True)  # Shows the UserProfile's __str__
+
     class Meta:
         model = Task
         fields = '__all__'
-
+        read_only_fields = ['created_by']
+    
+    def validate(self, data):
+        if 'end_time' in data and 'start_time' in data:
+            if data['end_time'] <= data['start_time']:
+                raise serializers.ValidationError("End time must be after start time.")
+        return data
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
