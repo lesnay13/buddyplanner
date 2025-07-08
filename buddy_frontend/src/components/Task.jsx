@@ -5,7 +5,7 @@ import TaskList from './TaskList';
 import { useAuth } from '../contexts/AuthContext'; // Import useAuth
 
 const Task = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const { currentUser } = useAuth(); // Get currentUser from AuthContext
 
   const onSubmit = async (data) => {
@@ -13,8 +13,8 @@ const Task = () => {
     const taskData = {
       title: data.title,
       description: data.description,
-      start_time: startTime,
-      end_time: endTime,
+      start_time: new Date(data.startTime).toISOString(),
+      end_time: new Date(data.endTime).toISOString(),
       location: data.location,
       is_all_day: data.is_all_day,
       created_by: currentUser.user_id, // Add created_by

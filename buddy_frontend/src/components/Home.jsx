@@ -1,39 +1,36 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';  
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
-  const { currentUser, logout } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!currentUser) {
-      navigate('/login');
-    }
-  }, [currentUser, navigate]);
-
-  if (!currentUser) {
-    return null; // Still render nothing if not logged in
-  }
-
   return (
-    <>
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        <div className="text-center">
-          <h1>Welcome to BuddyPlanner</h1>
-          <span className="font-bold">{currentUser.displayName}</span>
-          <br />
-          This is gonna be a summary of your day that is on the app.
-          Add options for journaling and adjust the models. Create a journaling component. 
-          Adjust the recipe traking area. Add a meal traker / mood tracker into the journaling area.
-          Task page will have a task list for the day or week/month view? Undecided?  
-          <br />
-          Happy tasking and planning!
-          <br />
-          <br />
+    <div className="container mx-auto p-4">
+      <div className="flex justify-end space-x-4">
+        <Link to="/login" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Login
+        </Link>
+        <Link to="/signup" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+          Sign Up
+        </Link>
+      </div>
+      <h1 className="text-4xl font-bold text-center my-8">Welcome to Buddy Planner</h1>
+      <p className="text-lg text-center mb-8">
+        Your personal assistant to organize your life, track your tasks, and plan your meals.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Task Management</h2>
+          <p>Organize your daily tasks, set reminders, and track your progress. Never miss a deadline again.</p>
         </div>
-      </main>
-    </>
+        <div className="p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Meal Planner</h2>
+          <p>Plan your meals for the week, discover new recipes, and create shopping lists with ease.</p>
+        </div>
+        <div className="p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Journaling</h2>
+          <p>Keep a personal journal to reflect on your day, track your mood, and practice gratitude.</p>
+        </div>
+      </div>
+    </div>
   );
 };
 

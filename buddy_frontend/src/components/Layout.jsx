@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Layout({ children }) {
-  const { logout } = useAuth();
+  const { currentUser, logout } = useAuth();
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -11,25 +11,31 @@ export default function Layout({ children }) {
           <Link to="/" className="text-xl font-bold text-gray-800">
             BuddyPlanner
           </Link>
-          <Link to="/calendar" className="text-gray-700 hover:text-gray-900">
-            Calendar
-          </Link>
-          <Link to="/task" className="text-gray-700 hover:text-gray-900">
-            Task
-          </Link>
-          <Link to="/profile" className="text-gray-700 hover:text-gray-900">
-            Profile
-          </Link>
-          <Link to="/recipes" className="text-gray-700 hover:text-gray-900">
-            Recipes
-          </Link>
+          {currentUser && (
+            <>
+              <Link to="/calendar" className="text-gray-700 hover:text-gray-900">
+                Calendar
+              </Link>
+              <Link to="/task" className="text-gray-700 hover:text-gray-900">
+                Task
+              </Link>
+              <Link to="/profile" className="text-gray-700 hover:text-gray-900">
+                Profile
+              </Link>
+              <Link to="/recipes" className="text-gray-700 hover:text-gray-900">
+                Recipes
+              </Link>
+            </>
+          )}
         </div>
-        <button
-          onClick={logout}
-          className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
-        >
-          Logout
-        </button>
+        {currentUser && (
+          <button
+            onClick={logout}
+            className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+          >
+            Logout
+          </button>
+        )}
       </nav>
       <main className="flex-1 p-4">{children}</main>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import axiosInstance from '../api/Axios';
 
 export default function Profile() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -10,9 +10,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/profile/', {
-          withCredentials: true
-        });
+        const response = await axiosInstance.get('/profile/');
         
         if (response.headers['content-type'].includes('application/json')) {
           setProfile(response.data);
@@ -33,12 +31,7 @@ export default function Profile() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.put('/api/profile/', data, {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken')
-        }
-      });
+      const response = await axiosInstance.put('/api/profile/', data);
       setProfile(response.data);
       // Add success notification here
     } catch (error) {
@@ -46,13 +39,6 @@ export default function Profile() {
       // Add error handling here
     }
   };
-
-  // Helper function to get CSRF token
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  }
 
   if (isLoading) return <div>Loading...</div>;
 

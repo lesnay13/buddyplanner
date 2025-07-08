@@ -81,12 +81,17 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class TaskSerializer(serializers.ModelSerializer):
-    created_by = serializers.StringRelatedField(read_only=True)  # Shows the UserProfile's __str__
-
+    # Change this line to return the user ID
+    created_by = serializers.SerializerMethodField()
+    
     class Meta:
         model = Task
         fields = '__all__'
         read_only_fields = ['created_by']
+    
+    def get_created_by(self, obj):
+        # Return the user ID instead of the string representation
+        return obj.created_by.user.id
     
     def validate(self, data):
         if 'end_time' in data and 'start_time' in data:

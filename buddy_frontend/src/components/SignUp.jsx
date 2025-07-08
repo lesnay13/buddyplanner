@@ -91,7 +91,7 @@ function SignUp() {
       <h1>BuddyPlanner</h1>
       <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username">Username  </label>
           <input
             type="text"
             id="username"
@@ -104,7 +104,7 @@ function SignUp() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Email  </label>
           <input
             type="email"
             id="email"
@@ -117,7 +117,7 @@ function SignUp() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Password  </label>
           <input
             type="password"
             id="password"
@@ -130,7 +130,7 @@ function SignUp() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password2">Confirm Password</label>
+          <label htmlFor="password2">Confirm Password </label>
           <input
             type="password"
             id="password2"
@@ -143,7 +143,7 @@ function SignUp() {
           />
         </div>
         {error && <div className="error-message">{error}</div>}
-        <button type="submit">Sign Up</button>
+        <button type="submit"> Sign Up </button>
       </form>
     </div>
   )

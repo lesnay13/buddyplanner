@@ -1,11 +1,9 @@
 // Login.jsx
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../api/Axios';
+import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
-  const navigate = useNavigate();
-
+  const { login } = useAuth();
   const [credentials, setCredentials] = useState({
     username: '',
     password: ''
@@ -22,19 +20,8 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axiosInstance.post(
-        '/api/token/', // 👈 Django JWT endpoint
-        credentials    // ✅ Sending just username and password
-      );
-
-      // ✅ Store tokens
-      localStorage.setItem('accessToken', response.data.access);
-      localStorage.setItem('refreshToken', response.data.refresh);
-
-      // ✅ Redirect to home page
-      navigate('/');
+      await login(credentials);
     } catch (err) {
       console.error('Login error:', err);
       if (err.response && err.response.status === 401) {
@@ -50,7 +37,7 @@ function Login() {
       <h1>BuddyPlanner</h1>
       <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username">Username: </label>
           <input
             type="text"
             id="username"
@@ -62,7 +49,7 @@ function Login() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Password: </label>
           <input
             type="password"
             id="password"
