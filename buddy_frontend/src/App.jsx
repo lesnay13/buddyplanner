@@ -4,15 +4,14 @@ import Home from './components/Home';
 import Calendar from './components/Calendar';
 import Profile from './components/Profile';
 import Task from './components/Task';
-import Recipes from './components/Recipe';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import Recipe from './components/Recipe';
 
 function App() {
   return (
-    // Remove the AuthProvider wrapper
     <Layout>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -39,7 +38,16 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/recipes" element={<ProtectedRoute><Recipes /></ProtectedRoute>} />
+        <Route
+         path="/recipes" 
+         element={ 
+            <ProtectedRoute>
+              <ErrorBoundary>
+                <Recipe/>
+              </ErrorBoundary>
+            </ProtectedRoute>
+          }
+          /> 
       </Routes>
     </Layout>
   );

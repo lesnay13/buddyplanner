@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       const refreshToken = localStorage.getItem('refreshToken');
       if (!refreshToken) return false;
       
-      const response = await axiosInstance.post('/api/token/refresh/', {
+      const response = await axiosInstance.post('/auth/token/refresh/', {
         refresh: refreshToken,
       });
       

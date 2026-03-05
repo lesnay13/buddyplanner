@@ -30,9 +30,12 @@ urlpatterns = [
     path("profile/", UserProfileView.as_view(), name="user-profile"),
     # Tasks
     path("api/tasks/", TaskListCreateView.as_view(), name="task-list-create"),
+    # Add this to your urlpatterns list
+    path('api/proxy/edamam/', views.proxy_edamam_api, name='proxy_edamam_api'),
+
     # Frontend catch-all route
     re_path(
-        r"^.*$",
+        r"^(?!admin|static|media).*$",
         TemplateView.as_view(template_name="index.html"),
         name="vite-frontend-catchall",
     ),

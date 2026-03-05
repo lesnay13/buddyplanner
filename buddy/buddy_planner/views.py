@@ -109,3 +109,36 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Task.objects.filter(created_by=self.request.user.profile)
 
+
+# Add these imports at the top
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+# Add this new view
+@csrf_exempt
+def proxy_edamam_api(request):
+    if request.method == 'GET':
+        query = request.GET.get('q', '')
+        app_id = request.GET.get('app_id', '')
+        app_key = request.GET.get('app_key', '')
+        
+        # Forward the request to Edamam API
+        edamam_url = f"https://api.edamam.com/api/recipes/v2?type=public&q={query}&app_id={app_id}&app_key={app_key}"
+        
+        # Add User ID header for apps with Active User Tracking enabled
+        headers = {
+            "Edamam-Account-User": "buddy_user"
+        }
+        
+        print(f"DEBUG: Fetching Edamam URL: {edamam_url}")
+        response = requests.get(edamam_url, headers=headers)
+        print(f"DEBUG: Edamam Response Status: {response.status_code}")
+        print(f"DEBUG: Edamam Response Body: {response.text}")
+        
+        # Return the response from Edamam API
+        return JsonResponse(response.json())
+    
+    return JsonResponse({"error": "Method not allowed"}, status=405)
+

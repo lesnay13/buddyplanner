@@ -50,7 +50,7 @@ export default function Profile() {
           <label style={{ display: 'block', marginBottom: '5px' }}>Username:</label>
           <input
             type="text"
-            style={{ backgroundColor: 'white', width: '100%' }}
+            style={{ backgroundColor: 'grey', width: '100%' }}
             defaultValue={profile?.user?.username || ''}
             disabled
           />
@@ -60,7 +60,7 @@ export default function Profile() {
           <label style={{ display: 'block', marginBottom: '5px' }}>Birth Date:</label>
           <input
             type="date"
-            style={{ backgroundColor: 'white', width: '100%' }}
+            style={{ backgroundColor: 'grey', width: '100%' }}
             {...register('birth_date')}
             defaultValue={profile?.user?.birth_date || ''}
           />
@@ -70,7 +70,7 @@ export default function Profile() {
           <label style={{ display: 'block', marginBottom: '5px' }}>Phone Number:</label>
           <input
             type="text"
-            style={{ backgroundColor: 'white', width: '100%' }}
+            style={{ backgroundColor: 'grey', width: '100%' }}
             {...register('phone_number')}
             defaultValue={profile?.user?.phone_number || ''}
           />
@@ -79,7 +79,7 @@ export default function Profile() {
         <div style={{ marginBottom: '15px' }}>
           <label style={{ display: 'block', marginBottom: '5px' }}>Bio:</label>
           <textarea
-            style={{ backgroundColor: 'white', width: '100%', minHeight: '100px' }}
+            style={{ backgroundColor: 'grey', width: '100%', minHeight: '100px' }}
             {...register('bio')}
             defaultValue={profile?.bio || ''}
           />
