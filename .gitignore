@@ -1,0 +1,15 @@
+# env files
+.env
+.env.*
+**/.env
+**/.env.*
+
+# python
+__pycache__/
+*.pyc
+
+# node
+node_modules/
+
+# macOS
+.DS_Store
