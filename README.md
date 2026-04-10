@@ -44,11 +44,18 @@ pip install -r requirements.txt
 ```
 
 ### Step 4: Configure Environment Variables
-Create a `.env` file in the `backend` directory (same level as `manage.py`).
+Create a `.env` file in the `frontend` directory (same level as `readme.md`) by copying the mock file:
+
+```bash
+cp .env.example .env
+```
+
+Set at least these values:
 
 ```ini
 DEBUG=True
 SECRET_KEY=django-insecure-dev-key
+ZENSERP_API_KEY=your_zenserp_api_key
 ```
 
 ### Step 5: Apply Migrations
@@ -89,8 +96,17 @@ npm install
 ```
 
 ### Step 3: Configure Environment Variables
-Ensure a `.env` file exists in `frontend/` with the necessary API keys (e.g., Edamam API).
-*Note: The project uses Vite env vars such as `VITE_API_URL`, `VITE_REACT_APP_EDAMAM_API_ID`, and `VITE_REACT_APP_EDAMAM_API_KEY`.*
+Create a `.env` file in `frontend/` by copying the mock file:
+
+```bash
+cp .env.example .env
+```
+
+Set your frontend variables for API access:
+- `VITE_API_URL` for backend base URL
+- `VITE_REACT_APP_EDAMAM_API_ID` and `VITE_REACT_APP_EDAMAM_API_KEY` for Recipe Search
+- `VITE_REACT_APP_EDAMAM_NUTRITION_ID` and `VITE_REACT_APP_EDAMAM_NUTRITION_KEY` for Nutrition Analysis (or reuse recipe keys if your Edamam app supports both)
+- `VITE_REACT_APP_EDAMAM_API_URL` set to `https://api.edamam.com`
 
 ### Step 4: Run the Development Server
 ```bash
@@ -105,6 +121,12 @@ The frontend will be running at `http://localhost:5173`.
 -   **Frontend**: [http://localhost:5173](http://localhost:5173)
 -   **Backend API**: [http://localhost:8000](http://localhost:8000)
 -   **Admin Panel**: [http://localhost:8000/admin](http://localhost:8000/admin)
+
+## API Setup Reference
+
+- Zenserp (Quote of the Day): create key at `https://app.zenserp.com/documentation` and set one of these keys: `ZENSERP_API_KEY` (preferred, `backend/.env`), `VITE_ZENSERP_API_KEY`, or `VITE_REACT_APP_ZENSERP_API_KEY` (supported from existing `frontend/.env`).
+- Edamam Recipe API: create key at `https://developer.edamam.com/` and put `VITE_REACT_APP_EDAMAM_API_ID` and `VITE_REACT_APP_EDAMAM_API_KEY` in `frontend/.env`.
+- Edamam Nutrition Analysis API: put `VITE_REACT_APP_EDAMAM_NUTRITION_ID` and `VITE_REACT_APP_EDAMAM_NUTRITION_KEY` in `frontend/.env`.
 
 ## Current Features
 

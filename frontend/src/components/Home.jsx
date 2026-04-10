@@ -1,22 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axiosInstance from '../api/Axios';
-
-const QUOTES = [
-  'Small progress is still progress.',
-  'Discipline is choosing what you want most.',
-  'You do not have to be perfect to be consistent.',
-  'Focus on the next right step.',
-  'A calm plan beats rushed effort.',
-  'The only easy day was yesterday.'
-];
-
-const getDayOfYear = (date) => {
-  const start = new Date(date.getFullYear(), 0, 0);
-  const diff = date - start;
-  return Math.floor(diff / 86400000);
-};
 
 const Home = () => {
   const { currentUser } = useAuth();
@@ -26,11 +11,9 @@ const Home = () => {
   const [tasksError, setTasksError] = useState('');
   const [journalEntry, setJournalEntry] = useState('');
   const [journalMessage, setJournalMessage] = useState('');
-
-  const quoteOfDay = useMemo(() => {
-    const index = getDayOfYear(new Date()) % QUOTES.length;
-    return QUOTES[index];
-  }, []);
+  const [quoteText, setQuoteText] = useState('');
+  const [quoteLoading, setQuoteLoading] = useState(true);
+  const [quoteError, setQuoteError] = useState('');
 
   useEffect(() => {
     if (!currentUser) return;
@@ -86,6 +69,29 @@ const Home = () => {
     fetchTodayJournal();
   }, [currentUser]);
 
+  useEffect(() => {
+    const fetchQuote = async () => {
+      setQuoteLoading(true);
+      setQuoteError('');
+      try {
+        const response = await axiosInstance.get('/api/proxy/quote/');
+        if (response.data?.quote) {
+          setQuoteText(response.data.quote);
+        } else {
+          setQuoteText('');
+          setQuoteError('No internet quote available right now.');
+        }
+      } catch {
+        setQuoteText('');
+        setQuoteError('No internet quote available right now.');
+      } finally {
+        setQuoteLoading(false);
+      }
+    };
+
+    fetchQuote();
+  }, []);
+
   const saveJournal = async () => {
     if (!currentUser) return;
     try {
@@ -104,14 +110,36 @@ const Home = () => {
     <div className="mx-auto max-w-6xl p-4">
       {!currentUser && (
         <>
-          <div className="flex justify-end space-x-4">
-            <Link to="/login" className="menu-item menu-sky">Login</Link>
-            <Link to="/signup" className="menu-item menu-pink">Sign Up</Link>
-          </div>
           <h1 className="text-4xl font-bold text-center my-8 text-text-main">Welcome to Buddy Planner</h1>
-          <p className="text-lg text-center mb-8 text-text-muted">
-            Your personal assistant to organize your life, track your tasks, and plan your meals.
+          <p className="text-lg text-center mb-3 text-text-muted">
+            Plan tasks, track meals, write guided journals, and manage your calendar in one app.
           </p>
+          <p className="text-base text-center mb-6 text-text-muted">
+            Sign up to start building daily routines, save your progress, and stay consistent.
+          </p>
+          <div className="flex justify-center gap-3 mb-8 flex-wrap">
+            <Link to="/signup" className="menu-item menu-pink">Create Free Account</Link>
+            <Link to="/login" className="menu-item menu-sky">I Already Have an Account</Link>
+          </div>
+          <div className="task-layout">
+            <section className="task-panel" aria-labelledby="home-about-title">
+              <h2 id="home-about-title" className="home-panel-title">What You Can Do</h2>
+              <ul className="task-list">
+                <li className="task-list-item">Create and manage daily tasks on your calendar.</li>
+                <li className="task-list-item">Track nutrition and save daily facts.</li>
+                <li className="task-list-item">Write guided journal entries by day.</li>
+                <li className="task-list-item">Keep your progress organized in one dashboard.</li>
+              </ul>
+            </section>
+            <section className="task-panel" aria-labelledby="home-cta-title">
+              <h2 id="home-cta-title" className="home-panel-title">Why Sign Up</h2>
+              <ul className="task-list">
+                <li className="task-list-item">Your tasks and journal are saved by day.</li>
+                <li className="task-list-item">Nutrition facts connect directly to journal entries.</li>
+                <li className="task-list-item">Calendar combines your tasks and journal activity.</li>
+              </ul>
+            </section>
+          </div>
         </>
       )}
 
@@ -157,7 +185,8 @@ const Home = () => {
 
             <section className="task-panel" aria-labelledby="home-quote-title">
               <h2 id="home-quote-title" className="home-panel-title">Quote of the Day</h2>
-              <p>{quoteOfDay}</p>
+              {quoteLoading ? <p>Loading quote...</p> : quoteText ? <p>{quoteText}</p> : null}
+              {quoteError && <small className="task-error">{quoteError}</small>}
             </section>
           </div>
         </>

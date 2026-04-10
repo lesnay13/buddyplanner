@@ -8,7 +8,7 @@ from .views.auth import (
 )
 from .views.profiles import UserProfileView
 from .views.tasks import TaskListCreateView, TaskDetailView, JournalEntryListCreateView, JournalEntryUpsertView
-from .views.proxy import proxy_edamam_api, proxy_edamam_nutrition
+from .views.proxy import proxy_edamam_api, proxy_edamam_nutrition, proxy_zenserp_quote
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
@@ -39,6 +39,7 @@ urlpatterns = [
     # Proxy Endpoints
     path('api/proxy/edamam/', proxy_edamam_api, name='proxy_edamam_api'),
     path('api/proxy/nutrition/', proxy_edamam_nutrition, name='proxy_edamam_nutrition'),
+    path('api/proxy/quote/', proxy_zenserp_quote, name='proxy_zenserp_quote'),
 
     # Frontend catch-all route
     re_path(

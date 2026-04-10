@@ -119,11 +119,9 @@ export default function Journal() {
                   id="feeling-about-it"
                   type="text"
                   className="task-input"
-                  placeholder="😔 😐 🙂 😄"
                   value={form.feeling_about_it}
                   onChange={(e) => handleFieldChange('feeling_about_it', e.target.value)}
                 />
-                <small className="journal-emoji-help">Include emojis to rate emotion.</small>
               </div>
 
               <div className="task-field">

@@ -13,18 +13,9 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const [profileResponse, apiProfileResponse] = await Promise.all([
-          axiosInstance.get('/profile/'),
-          axiosInstance.get('/api/profile/'),
-        ]);
-
-        const mergedProfile = {
-          ...profileResponse.data,
-          profile_picture: apiProfileResponse.data?.profile_picture || null,
-        };
-
-        setProfile(mergedProfile);
-        reset(mergedProfile);
+        const profileResponse = await axiosInstance.get('/profile/');
+        setProfile(profileResponse.data);
+        reset(profileResponse.data);
       } catch (error) {
         console.error('Error fetching profile:', error);
       } finally {
@@ -37,7 +28,7 @@ export default function Profile() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axiosInstance.put('/api/profile/', data);
+      const response = await axiosInstance.put('/profile/', data);
       setProfile((prev) => ({ ...prev, ...response.data }));
     } catch (error) {
       console.error('Error updating profile:', error.response?.data || error.message);
@@ -53,7 +44,7 @@ export default function Profile() {
       const formData = new FormData();
       formData.append('profile_picture', selectedImage);
 
-      const response = await axiosInstance.patch('/api/profile/', formData, {
+      const response = await axiosInstance.patch('/profile/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
