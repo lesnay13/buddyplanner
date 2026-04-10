@@ -1,0 +1,139 @@
+.recipePage {
+  color: inherit;
+}
+
+.recipeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.recipe {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  min-height: 100%;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.recipe:hover {
+  transform: translateY(-2px);
+}
+
+.recipe:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(65, 105, 225, 0.35),
+    var(--shadow-soft);
+}
+
+.image,
+.modalImage {
+  border-radius: 12px;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.recipeDetails,
+.modalSection,
+.modalMeta {
+  width: 100%;
+}
+
+.recipeList {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.recipeLinkHint,
+.modalSource,
+.modalText,
+.modalMuted {
+  color: var(--text-muted);
+}
+
+.recipeLinkHint {
+  width: 100%;
+  font-size: 0.875rem;
+  text-decoration: underline;
+}
+
+.searchForm {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.searchBar {
+  flex: 1;
+}
+
+.searchButton,
+.modalClose,
+.recipeActionLink {
+  width: auto;
+  text-decoration: none;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modalPanel {
+  width: min(100%, 48rem);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.modalMeta,
+.modalSection {
+  margin-top: 1rem;
+}
+
+.recipeActionLink {
+  display: inline-block;
+  margin-top: 0.75rem;
+}
+
+:global(.dark) .recipePage,
+:global(.dark) .recipeLinkHint,
+:global(.dark) .modalSource,
+:global(.dark) .modalText,
+:global(.dark) .modalMuted {
+  color: #d3d3d3;
+}
+
+@media (max-width: 640px) {
+  .searchForm,
+  .modalHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchButton,
+  .modalClose,
+  .recipeActionLink {
+    width: 100%;
+  }
+}

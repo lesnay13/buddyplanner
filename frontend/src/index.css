@@ -1,0 +1,884 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary-bg: var(--bg-primary);
+  --color-secondary-bg: var(--bg-secondary);
+  --color-tertiary-bg: var(--bg-tertiary);
+
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-purple-hover: var(--accent-purple-hover);
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-pink-hover: var(--accent-pink-hover);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-blue-hover: var(--accent-blue-hover);
+}
+
+:root {
+  /* Diary Theme (Beige paper base) */
+  --bg-primary: #f5f5dc; /* Beige */
+  --bg-secondary: #f0e68c; /* Khaki */
+  --bg-tertiary: #ddd6c6;
+
+  --paper-bg: #f5e6d3; /* Warm beige paper */
+  --border-paper: #e4d8c8;
+  --shadow-soft: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --card-bg: #ffffff;
+  --card-text: #000000;
+
+  --text-main: #1a1a1a; /* Black-ish for readability */
+  --text-muted: #4a4a4a;
+
+  /* Accents */
+  --accent-purple: #9370db;
+  --accent-purple-hover: #8b008b;
+  --accent-pink: #ffb6c1;
+  --accent-pink-hover: #ff69b4;
+  --accent-blue: #87ceeb;
+  --accent-blue-hover: #4169e1;
+
+  /* Menu palette */
+  --menu-pink: #ffb6c1;
+  --menu-pink-hover: #ffa0b0;
+  --menu-mint: #98d8c8;
+  --menu-mint-hover: #8fcfc0;
+  --menu-khaki: #f0e68c;
+  --menu-khaki-hover: #e6d27a;
+  --menu-lilac: #dda0dd;
+  --menu-lilac-hover: #c993d9;
+  --menu-sky: #87ceeb;
+  --menu-sky-hover: #76bee0;
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: var(--text-main);
+  background-color: var(--paper-bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root.dark {
+  /* Dark Theme - comprehensive grey palette */
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2d2d2d;
+
+  --paper-bg: #0f0f0f;
+  --border-paper: #2d2d2d;
+  --shadow-soft: 0 2px 6px rgba(0, 0, 0, 0.35);
+  --card-bg: #f5f5f5;
+  --card-text: #000000;
+
+  --text-main: #d3d3d3;
+  --text-muted: #bdbdbd;
+
+  /* Accents kept subtle for contrast */
+  --accent-purple: #8a7bd1;
+  --accent-purple-hover: #b9aee6;
+  --accent-pink: #ff6fa5;
+  --accent-pink-hover: #ff8fba;
+  --accent-blue: #3b6dd8;
+  --accent-blue-hover: #5a86e3;
+
+  color-scheme: dark;
+}
+
+/* Preserve vibrant menu backgrounds in dark mode, force black text for contrast */
+.dark .menu-item {
+  color: #000000;
+}
+.dark .menu-item:hover {
+  color: #000000;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--paper-bg);
+  color: var(--text-main);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+a {
+  font-weight: 500;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--accent-blue-hover);
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--accent-purple);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    background-color 0.25s,
+    border-color 0.25s;
+}
+button:hover {
+  background-color: var(--accent-purple-hover);
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Diary-themed utility classes */
+.diary-paper {
+  background-image:
+    radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(transparent 0%, rgba(0, 0, 0, 0.03) 100%);
+  background-size:
+    4px 4px,
+    100% 100%;
+  background-position:
+    0 0,
+    0 0;
+}
+
+.header-bar {
+  background-color: var(--paper-bg);
+  border-bottom: 1px solid var(--border-paper);
+  box-shadow: var(--shadow-soft);
+}
+
+.content-card {
+  background-color: var(--card-bg, #fff);
+  color: var(--card-text, inherit);
+  border: 1px solid var(--border-paper);
+  box-shadow: var(--shadow-soft);
+  border-radius: 12px;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+.content-card a {
+  color: var(--card-text, inherit);
+}
+
+.menu-item {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  border-radius: 10px;
+  font-weight: 600;
+  color: var(--text-main);
+  border: 1px solid var(--border-paper);
+  box-shadow: var(--shadow-soft);
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.menu-item:hover {
+  transform: translateY(-1px);
+}
+.menu-item:active {
+  transform: translateY(0);
+}
+.menu-item:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(65, 105, 225, 0.35),
+    var(--shadow-soft);
+}
+
+.menu-pink {
+  background-color: var(--menu-pink);
+}
+.menu-pink:hover {
+  background-color: var(--menu-pink-hover);
+}
+
+.menu-mint {
+  background-color: var(--menu-mint);
+}
+.menu-mint:hover {
+  background-color: var(--menu-mint-hover);
+}
+
+.menu-khaki {
+  background-color: var(--menu-khaki);
+}
+.menu-khaki:hover {
+  background-color: var(--menu-khaki-hover);
+}
+
+.menu-lilac {
+  background-color: var(--menu-lilac);
+}
+.menu-lilac:hover {
+  background-color: var(--menu-lilac-hover);
+}
+
+.menu-sky {
+  background-color: var(--menu-sky);
+}
+.menu-sky:hover {
+  background-color: var(--menu-sky-hover);
+}
+
+.login-container {
+  width: min(100%, 28rem);
+  min-height: calc(100vh - 8rem);
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
+  border-radius: 24px;
+  color: #d3d3d3;
+  background:
+    linear-gradient(rgba(65, 65, 65, 0.55), rgba(83, 83, 83, 0.55)), rgba(180, 179, 179, 0.78);
+  border: 1px solid rgba(211, 211, 211, 0.24);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(8px);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.login-container h1,
+.login-form label,
+.login-form button,
+.login-form input,
+.login-form input::placeholder,
+.login-form .error-message {
+  color: #d3d3d3;
+}
+
+.login-container h1 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  line-height: 1.1;
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.login-form label {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.login-form input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(211, 211, 211, 0.24);
+  background:
+    linear-gradient(rgba(24, 24, 24, 0.45), rgba(24, 24, 24, 0.45)), rgba(128, 128, 128, 0.75);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.login-form input::placeholder {
+  opacity: 0.85;
+}
+
+.login-form input:focus-visible,
+.login-form button:focus-visible {
+  outline: none;
+  border-color: rgba(211, 211, 211, 0.72);
+  box-shadow: 0 0 0 3px rgba(211, 211, 211, 0.2);
+}
+
+.login-form button {
+  width: 100%;
+  border: 1px solid rgba(211, 211, 211, 0.28);
+  background:
+    linear-gradient(rgba(24, 24, 24, 0.35), rgba(24, 24, 24, 0.35)), rgba(128, 128, 128, 0.8);
+  font-weight: 700;
+}
+
+.login-form button:hover {
+  background:
+    linear-gradient(rgba(24, 24, 24, 0.2), rgba(24, 24, 24, 0.2)), rgba(128, 128, 128, 0.88);
+}
+
+.login-form .error-message {
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background-color: rgba(120, 40, 40, 0.24);
+  border: 1px solid rgba(255, 196, 196, 0.24);
+}
+
+.dark .fc .fc-toolbar-title {
+  color: #d3d3d3;
+}
+
+.task-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+  justify-content: center;
+  width: min(100%, 72rem);
+  margin: 0 auto;
+}
+
+.task-page-title {
+  color: var(--text-main);
+}
+
+.home-panel-title {
+  margin: 0 0 1rem;
+  text-align: center;
+  color: inherit;
+}
+
+.profile-picture-panel {
+  flex: 0 1 18rem;
+  max-width: 20rem;
+}
+
+.profile-picture-preview {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  border: 1px solid var(--border-paper);
+  background-color: rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-picture-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-picture-placeholder {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 1rem;
+}
+
+.task-panel {
+  flex: 1 1 24rem;
+  padding: 1.5rem;
+  border-radius: 24px;
+  color: var(--text-main);
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-paper);
+  box-shadow: var(--shadow-soft);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease;
+}
+
+.task-panel h1,
+.task-panel h2,
+.task-panel h3,
+.task-panel h4,
+.task-panel p,
+.task-panel strong,
+.task-panel small,
+.task-panel label,
+.task-panel span,
+.task-panel li {
+  color: inherit;
+}
+
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.task-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.task-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  color: var(--text-main);
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-paper);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease;
+}
+
+.task-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+.task-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.task-checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-submit-button {
+  width: 100%;
+  border: 1px solid rgba(211, 211, 211, 0.28);
+  background: var(--accent-purple);
+  color: #fff;
+  font-weight: 700;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    opacity 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.task-submit-button:hover:not(:disabled) {
+  background: var(--accent-purple-hover);
+}
+
+.task-submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.task-error {
+  color: #ffb4b4;
+  font-size: 0.9rem;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.task-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-paper);
+}
+
+.nutrition-layout {
+  align-items: stretch;
+}
+
+.nutrition-page-title {
+  color: var(--text-main);
+}
+
+:root.dark .nutrition-page-title,
+.dark .nutrition-page-title {
+  color: #d3d3d3;
+}
+
+.nutrition-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nutrition-helper-text,
+.nutrition-empty-state {
+  color: var(--text-muted);
+}
+
+.nutrition-textarea {
+  min-height: 16rem;
+}
+
+.nutrition-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.nutrition-summary,
+.nutrition-fact-row,
+.nutrition-empty-panel {
+  border-radius: 16px;
+  border: 1px solid var(--border-paper);
+  background-color: rgba(0, 0, 0, 0.03);
+  box-shadow: var(--shadow-soft);
+}
+
+.nutrition-summary {
+  padding: 1rem;
+}
+
+.nutrition-summary h3,
+.nutrition-labels-section h4 {
+  margin: 0 0 0.75rem;
+}
+
+.nutrition-calendar-save {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nutrition-calendar-save-controls {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.nutrition-calendar-date-field {
+  flex: 1 1 12rem;
+}
+
+.nutrition-save-button {
+  width: auto;
+}
+
+.nutrition-calories-row,
+.nutrition-fact-row,
+.nutrition-servings-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.nutrition-calories-row {
+  align-items: flex-end;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 800;
+}
+
+.nutrition-servings-row {
+  align-items: center;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+}
+
+.nutrition-servings-input {
+  width: 5.5rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.nutrition-facts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nutrition-fact-row {
+  padding: 0.85rem 1rem;
+}
+
+.nutrition-fact-row-strong {
+  font-weight: 700;
+}
+
+.nutrition-fact-row-nested {
+  padding-left: 2rem;
+}
+
+.nutrition-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nutrition-label-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-paper);
+  background-color: rgba(0, 0, 0, 0.03);
+  color: inherit;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.nutrition-label-badge:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.nutrition-message {
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 196, 196, 0.24);
+}
+
+.nutrition-message-error {
+  background-color: rgba(120, 40, 40, 0.12);
+  color: #9f1d1d;
+}
+
+.nutrition-message-success {
+  background-color: rgba(65, 105, 225, 0.1);
+  border-color: rgba(65, 105, 225, 0.24);
+  color: var(--text-main);
+}
+
+.nutrition-empty-panel {
+  min-height: 16rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+}
+
+.journal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.journal-grid .task-field {
+  margin: 0;
+}
+
+.journal-emoji-help {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.calendar-layout {
+  align-items: stretch;
+}
+
+.calendar-container {
+  width: min(100%, 72rem);
+  margin: 0 auto;
+}
+
+.calendar-container .fc {
+  color: inherit;
+}
+
+.calendar-container .fc .fc-toolbar,
+.calendar-container .fc .fc-toolbar-title,
+.calendar-container .fc .fc-col-header-cell-cushion,
+.calendar-container .fc .fc-daygrid-day-number,
+.calendar-container .fc .fc-event-title,
+.calendar-container .fc .fc-event-time {
+  color: inherit;
+}
+
+.calendar-container .fc .fc-toolbar {
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.calendar-container .fc-theme-standard td,
+.calendar-container .fc-theme-standard th,
+.calendar-container .fc-theme-standard .fc-scrollgrid {
+  border-color: var(--border-paper);
+}
+
+.calendar-container .fc .fc-col-header-cell,
+.calendar-container .fc .fc-daygrid-day-frame {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.calendar-container .fc .fc-col-header-cell {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.calendar-container .fc .fc-daygrid-day:hover .fc-daygrid-day-frame {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.calendar-container .fc .fc-day-today {
+  background-color: color-mix(in srgb, var(--accent-purple) 14%, transparent) !important;
+}
+
+.calendar-container .fc .fc-day-today .fc-daygrid-day-number {
+  color: var(--accent-purple-hover);
+  font-weight: 700;
+}
+
+.calendar-container .fc .fc-highlight {
+  background-color: color-mix(in srgb, var(--accent-purple) 18%, transparent);
+}
+
+.calendar-container .fc .fc-button-primary,
+.calendar-container .fc .fc-event {
+  border: 1px solid rgba(211, 211, 211, 0.28);
+  background: var(--accent-purple);
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+.calendar-container .fc .fc-button-primary:hover,
+.calendar-container .fc .fc-button-primary:active,
+.calendar-container .fc .fc-button-primary:focus,
+.calendar-container .fc .fc-event:hover {
+  border-color: rgba(211, 211, 211, 0.42);
+  background: var(--accent-purple-hover);
+}
+
+.calendar-container .fc .fc-button-primary:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue-hover) 35%, transparent);
+}
+
+.dark .task-panel {
+  color: #d3d3d3;
+  background:
+    linear-gradient(rgba(65, 65, 65, 0.55), rgba(83, 83, 83, 0.55)), rgba(180, 179, 179, 0.78);
+  border: 1px solid rgba(211, 211, 211, 0.24);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(8px);
+}
+
+.dark .task-panel h1,
+.dark .task-panel h2,
+.dark .task-panel p,
+.dark .task-panel strong,
+.dark .task-panel small,
+.dark .task-panel label,
+.dark .task-panel span,
+.dark .task-panel li,
+.dark .task-panel input,
+.dark .task-panel textarea,
+.dark .task-panel select,
+.dark .task-panel option,
+.dark .task-panel button {
+  color: #d3d3d3;
+}
+
+.dark .task-input {
+  border: 1px solid rgba(211, 211, 211, 0.24);
+  background:
+    linear-gradient(rgba(24, 24, 24, 0.45), rgba(24, 24, 24, 0.45)), rgba(128, 128, 128, 0.75);
+}
+
+.dark .task-input:focus-visible,
+.dark .task-submit-button:focus-visible {
+  outline: none;
+  border-color: rgba(211, 211, 211, 0.72);
+  box-shadow: 0 0 0 3px rgba(211, 211, 211, 0.2);
+}
+
+.dark .task-list-item,
+.dark .nutrition-summary,
+.dark .nutrition-fact-row,
+.dark .nutrition-empty-panel,
+.dark .nutrition-label-badge,
+.dark .nutrition-message,
+.dark .calendar-container .fc .fc-col-header-cell,
+.dark .calendar-container .fc .fc-daygrid-day:hover .fc-daygrid-day-frame {
+  background: rgba(24, 24, 24, 0.28);
+  border: 1px solid rgba(211, 211, 211, 0.16);
+}
+
+.dark .nutrition-panel,
+.dark .nutrition-panel h1,
+.dark .nutrition-panel h2,
+.dark .nutrition-panel h3,
+.dark .nutrition-panel h4,
+.dark .nutrition-panel p,
+.dark .nutrition-panel span,
+.dark .nutrition-panel div,
+.dark .nutrition-panel label,
+.dark .nutrition-panel li,
+.dark .nutrition-panel strong,
+.dark .nutrition-panel small,
+.dark .nutrition-helper-text,
+.dark .nutrition-empty-state,
+.dark .nutrition-message-success {
+  color: #d3d3d3;
+}
+
+.dark .nutrition-message-success,
+.dark .nutrition-label-badge:hover {
+  background:
+    linear-gradient(rgba(24, 24, 24, 0.45), rgba(24, 24, 24, 0.45)), rgba(128, 128, 128, 0.75);
+  border-color: rgba(211, 211, 211, 0.24);
+}
+
+.dark .calendar-container .fc-theme-standard td,
+.dark .calendar-container .fc-theme-standard th,
+.dark .calendar-container .fc-theme-standard .fc-scrollgrid {
+  border-color: rgba(211, 211, 211, 0.16);
+}
+
+.dark .calendar-container .fc .fc-day-today {
+  background-color: color-mix(in srgb, var(--accent-purple) 24%, rgba(24, 24, 24, 0.28)) !important;
+}
+
+.dark .nutrition-message-error {
+  background:
+    linear-gradient(rgba(24, 24, 24, 0.45), rgba(24, 24, 24, 0.45)), rgba(128, 128, 128, 0.75);
+  border-color: rgba(211, 211, 211, 0.24);
+  color: #ffb4b4;
+}
+
+@media (max-width: 640px) {
+  .login-container,
+  .task-panel {
+    min-height: auto;
+    padding: 1.25rem;
+    border-radius: 20px;
+  }
+
+  .calendar-container .fc .fc-toolbar,
+  .nutrition-calendar-save-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nutrition-save-button {
+    width: 100%;
+  }
+}
